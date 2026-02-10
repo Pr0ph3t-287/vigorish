@@ -1,0 +1,25 @@
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+th.sortable:hover {
+  background-color: rgba(0, 0, 0, 0.075);
+}
+
+tr.clickable {
+  cursor: pointer;
+}
+
+tr.clickable:hover {
+  background-color: rgba(0, 0, 0, 0.025);
+}
+
+.bi {
+  font-size: 0.875rem;
+}
+
+.table-responsive {
+  max-height: 600px;
+  overflow-y: auto;
+}

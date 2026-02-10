@@ -1,0 +1,80 @@
+<div class="container">
+  <div class="row justify-content-center align-items-center min-vh-100">
+    <div class="col-md-6 col-lg-4">
+      <div class="card shadow">
+        <div class="card-body p-4">
+          <h2 class="card-title text-center mb-4">Login</h2>
+
+          @if (errorMessage()) {
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ errorMessage() }}
+            <button
+              type="button"
+              class="btn-close"
+              (click)="errorMessage.set('')"
+              aria-label="Close"
+            ></button>
+          </div>
+          }
+
+          <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                [ngModel]="email()"
+                (ngModelChange)="email.set($event)"
+                required
+                email
+                placeholder="Enter your email"
+                [disabled]="isLoading()"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                [ngModel]="password()"
+                (ngModelChange)="password.set($event)"
+                required
+                placeholder="Enter your password"
+                [disabled]="isLoading()"
+              />
+            </div>
+
+            <div class="d-grid gap-2">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="!loginForm.form.valid || isLoading()"
+              >
+                @if (isLoading()) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Logging in...
+                } @else {
+                Login
+                }
+              </button>
+            </div>
+          </form>
+
+          <hr class="my-4" />
+
+          <div class="text-center">
+            <p class="mb-0">
+              Don't have an account?
+              <a href="/register" class="text-decoration-none">Register here</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

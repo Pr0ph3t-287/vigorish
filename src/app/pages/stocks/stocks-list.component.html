@@ -1,0 +1,28 @@
+<div class="container-fluid mt-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="mb-0">Inventory & Stocks</h1>
+      <p class="text-muted">Manage all stock items and inventory</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <app-data-table
+        [config]="tableConfig"
+        (rowClick)="onRowClick($event)"
+        (createClick)="onCreateClick()"
+      ></app-data-table>
+    </div>
+  </div>
+</div>
+
+@if (showModal()) {
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <app-stock-form (saved)="onFormSaved()" (cancelled)="onFormCancelled()"></app-stock-form>
+    </div>
+  </div>
+</div>
+}

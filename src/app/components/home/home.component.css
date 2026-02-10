@@ -1,0 +1,19 @@
+.card {
+  border-radius: 0.5rem;
+}
+
+.hover-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.hover-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  border-color: rgba(0, 123, 255, 0.3);
+}
+
+.icon-container {
+  padding: 1rem;
+}

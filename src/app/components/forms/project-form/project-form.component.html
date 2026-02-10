@@ -1,0 +1,72 @@
+<div class="modal-header">
+  <h5 class="modal-title">Add New Project</h5>
+  <button type="button" class="btn-close" (click)="onCancel()" [disabled]="isSubmitting()"></button>
+</div>
+
+<form (ngSubmit)="onSubmit()">
+  <div class="modal-body">
+    @if (error()) {
+    <div class="alert alert-danger" role="alert">{{ error() }}</div>
+    }
+
+    <div class="mb-3">
+      <label for="name" class="form-label">Project Name <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" id="name" [value]="formData().name"
+        (input)="updateField('name', $any($event.target).value)" required [disabled]="isSubmitting()" />
+    </div>
+
+    <div class="mb-3">
+      <label for="clientId" class="form-label">Client <span class="text-danger">*</span></label>
+      <select class="form-select" id="clientId" [value]="formData().clientId"
+        (change)="updateField('clientId', +$any($event.target).value)" required [disabled]="isSubmitting()">
+        <option [value]="0">Select a client...</option>
+        @for (client of clients(); track client.id) {
+        <option [value]="client.id">{{ client.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea class="form-control" id="description" rows="3" [value]="formData().description"
+        (input)="updateField('description', $any($event.target).value)" [disabled]="isSubmitting()"></textarea>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="startDate" class="form-label">Start Date</label>
+        <input type="date" class="form-control" id="startDate" [value]="formData().startDate"
+          (input)="updateField('startDate', $any($event.target).value)" [disabled]="isSubmitting()" />
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="endDate" class="form-label">End Date</label>
+        <input type="date" class="form-control" id="endDate" [value]="formData().endDate"
+          (input)="updateField('endDate', $any($event.target).value)" [disabled]="isSubmitting()" />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select class="form-select" id="status" [value]="formData().status"
+        (change)="updateField('status', +$any($event.target).value)" [disabled]="isSubmitting()">
+        @for (status of projectStatuses; track status.key) {
+        <option [value]="status.key">{{ status.value }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="onCancel()" [disabled]="isSubmitting()">
+      Cancel
+    </button>
+    <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
+      @if (isSubmitting()) {
+      <span class="spinner-border spinner-border-sm me-2"></span>
+      Creating...
+      } @else {
+      Create Project
+      }
+    </button>
+  </div>
+</form>
