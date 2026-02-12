@@ -26,7 +26,7 @@ export class TaskFormComponent implements OnInit {
     title: '',
     description: '',
     dueDate: '',
-    priority: TaskPriority.Medium,
+    priority: TaskPriority.Low,
     status: TaskItemStatus.Todo,
     projectId: 0,
   });
@@ -106,6 +106,12 @@ export class TaskFormComponent implements OnInit {
 
     if (!this.formData().projectId || this.formData().projectId === 0) {
       this.error.set('Please select a project');
+      return;
+    }
+
+    const dueDate = this.formData().dueDate;
+    if (!dueDate || !dueDate.trim()) {
+      this.error.set('Due date is required');
       return;
     }
 

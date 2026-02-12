@@ -72,6 +72,26 @@ export class ProjectFormComponent implements OnInit {
       return;
     }
 
+    const startDate = this.formData().startDate;
+    if (!startDate || !startDate.trim()) {
+      this.error.set('Start date is required');
+      return;
+    }
+
+    const endDate = this.formData().endDate;
+    if (!endDate || !endDate.trim()) {
+      this.error.set('End date is required');
+      return;
+    }
+
+    // Validate that end date is not before start date
+    const startDateObj = new Date(startDate);
+    const endDateObj = new Date(endDate);
+    if (endDateObj < startDateObj) {
+      this.error.set('End date must be on or after start date');
+      return;
+    }
+
     this.isSubmitting.set(true);
     this.error.set(null);
 

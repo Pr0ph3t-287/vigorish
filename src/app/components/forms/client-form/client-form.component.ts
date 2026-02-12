@@ -43,9 +43,58 @@ export class ClientFormComponent implements OnInit {
     return !!this.client;
   }
 
+  validatePhoneNumber(phone: string): boolean {
+    if (!phone) return true; // Phone is optional
+
+    // Remove all non-digit characters for validation
+    const digitsOnly = phone.replace(/\D/g, '');
+
+    // US phone number: 10 digits
+    // International: 7-15 digits
+    return digitsOnly.length >= 7 && digitsOnly.length <= 15;
+  }
+
+  formatPhoneNumber(phone: string): string {
+    // Remove all non-digit characters
+    const digitsOnly = phone.replace(/\D/g, '');
+
+    // Format US phone numbers (10 digits)
+    if (digitsOnly.length === 10) {
+      return `(${digitsOnly.slice(0, 3)}) ${digitsOnly.slice(3, 6)}-${digitsOnly.slice(6)}`;
+    }
+
+    // For other lengths, just return the digits
+    return digitsOnly;
+  }
+
+  validateEmail(email: string): boolean {
+    if (!email) return false; // Email is required
+
+    // Basic email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
   onSubmit(): void {
     if (!this.formData().name.trim()) {
       this.error.set('Name is required');
+      return;
+    }
+
+    const email = this.formData().email;
+    if (!email || !email.trim()) {
+      this.error.set('Email is required');
+      return;
+    }
+
+    if (!this.validateEmail(email)) {
+      this.error.set('Please enter a valid email address');
+      return;
+    }
+
+    const phone = this.formData().phone;
+    if (phone && !this.validatePhoneNumber(phone)) {
+      this.error.set('Please enter a valid phone number (7-15 digits)');
       return;
     }
 
@@ -76,5 +125,13 @@ export class ClientFormComponent implements OnInit {
 
   updateField<K extends keyof CreateClientRequest>(field: K, value: string): void {
     this.formData.update((data) => ({ ...data, [field]: value }));
+  }
+
+  onPhoneBlur(): void {
+    const phone = this.formData().phone;
+    if (phone) {
+      const formatted = this.formatPhoneNumber(phone);
+      this.updateField('phone', formatted);
+    }
   }
 }

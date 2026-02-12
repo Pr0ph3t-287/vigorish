@@ -54,7 +54,7 @@
     </div>
 
     <div class="mb-3">
-      <label for="dueDate" class="form-label">Due Date</label>
+      <label for="dueDate" class="form-label">Due Date <span class="text-danger">*</span></label>
       <input type="date" class="form-control" id="dueDate" [value]="formData().dueDate"
         (input)="updateField('dueDate', $any($event.target).value)" [disabled]="isSubmitting()" />
     </div>

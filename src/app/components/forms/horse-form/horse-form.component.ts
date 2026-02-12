@@ -69,6 +69,12 @@ export class HorseFormComponent implements OnInit {
       return;
     }
 
+    const dateOfBirth = this.formData().dateOfBirth;
+    if (!dateOfBirth || !dateOfBirth.trim()) {
+      this.error.set('Date of birth is required');
+      return;
+    }
+
     this.isSubmitting.set(true);
     this.error.set(null);
 

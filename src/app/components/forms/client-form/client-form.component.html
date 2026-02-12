@@ -25,13 +25,14 @@
     </div>
 
     <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
+      <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
       <input
         type="email"
         class="form-control"
         id="email"
         [value]="formData().email"
         (input)="updateField('email', $any($event.target).value)"
+        placeholder="client@example.com"
         [disabled]="isSubmitting()"
       />
     </div>
@@ -44,8 +45,11 @@
         id="phone"
         [value]="formData().phone"
         (input)="updateField('phone', $any($event.target).value)"
+        (blur)="onPhoneBlur()"
+        placeholder="(555) 123-4567"
         [disabled]="isSubmitting()"
       />
+      <small class="form-text text-muted">Enter 7-15 digits. US numbers will be auto-formatted.</small>
     </div>
 
     <div class="mb-3">
