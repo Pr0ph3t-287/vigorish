@@ -1,11 +1,18 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, shareReplay } from 'rxjs';
-import { LoginRequest, RegisterRequest, AuthResponse, RefreshTokenRequest, RevokeTokenRequest, UserRolesResponse } from '../models/auth.models';
+import {
+  LoginRequest,
+  RegisterRequest,
+  AuthResponse,
+  RefreshTokenRequest,
+  RevokeTokenRequest,
+  UserRolesResponse,
+} from '../models/auth.models';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/api/auth`;
@@ -24,19 +31,19 @@ export class AuthService {
 
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
-      tap(response => {
+      tap((response) => {
         this.handleAuthSuccess(response);
         this.loadUserRoles().subscribe();
-      })
+      }),
     );
   }
 
   register(data: RegisterRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data).pipe(
-      tap(response => {
+      tap((response) => {
         this.handleAuthSuccess(response);
         this.loadUserRoles().subscribe();
-      })
+      }),
     );
   }
 
@@ -46,13 +53,15 @@ export class AuthService {
       return this.refreshTokenInProgress;
     }
 
-    this.refreshTokenInProgress = this.http.post<AuthResponse>(`${this.apiUrl}/refresh`, request).pipe(
-      tap(response => {
-        this.handleAuthSuccess(response);
-        this.refreshTokenInProgress = null;
-      }),
-      shareReplay(1)
-    );
+    this.refreshTokenInProgress = this.http
+      .post<AuthResponse>(`${this.apiUrl}/refresh`, request)
+      .pipe(
+        tap((response) => {
+          this.handleAuthSuccess(response);
+          this.refreshTokenInProgress = null;
+        }),
+        shareReplay(1),
+      );
 
     return this.refreshTokenInProgress;
   }
@@ -65,7 +74,7 @@ export class AuthService {
     const refreshToken = localStorage.getItem('refreshToken');
     if (refreshToken) {
       this.revokeToken({ refreshToken }).subscribe({
-        complete: () => this.clearAuthData()
+        complete: () => this.clearAuthData(),
       });
     } else {
       this.clearAuthData();
@@ -122,12 +131,12 @@ export class AuthService {
 
   loadUserRoles(): Observable<UserRolesResponse> {
     return this.http.get<UserRolesResponse>(`${this.apiUrl}/me`).pipe(
-      tap(response => {
+      tap((response) => {
         this.userRolesSignal.set(response.roles);
         this.userEmailSignal.set(response.email);
         localStorage.setItem('userRoles', JSON.stringify(response.roles));
         localStorage.setItem('userEmail', response.email);
-      })
+      }),
     );
   }
 

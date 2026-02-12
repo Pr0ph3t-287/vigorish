@@ -13,7 +13,7 @@ import { Client } from '../../models/client.models';
   standalone: true,
   imports: [DataTableComponent, StockFormComponent],
   templateUrl: './stocks-list.component.html',
-  styleUrl: './stocks-list.component.css'
+  styleUrl: './stocks-list.component.css',
 })
 export class StocksListComponent implements OnInit {
   @ViewChild(DataTableComponent) dataTable!: DataTableComponent<Stock>;
@@ -29,9 +29,9 @@ export class StocksListComponent implements OnInit {
         label: 'Client',
         sortable: true,
         formatter: (value, row) => {
-          const client = this.clients().find(c => c.id === row.clientId);
+          const client = this.clients().find((c) => c.id === row.clientId);
           return client?.name || `Client #${value}`;
-        }
+        },
       },
       { key: 'category', label: 'Category', sortable: true },
       { key: 'description', label: 'Description', sortable: false },
@@ -40,22 +40,22 @@ export class StocksListComponent implements OnInit {
         label: 'Quantity',
         sortable: true,
         searchable: false,
-        formatter: (value) => value?.toString() || '0'
+        formatter: (value) => value?.toString() || '0',
       },
       {
         key: 'unitPrice',
         label: 'Unit Price',
         sortable: true,
         searchable: false,
-        formatter: (value) => value ? `$${value.toFixed(2)}` : '$0.00'
+        formatter: (value) => (value ? `$${value.toFixed(2)}` : '$0.00'),
       },
       {
         key: 'totalValue',
         label: 'Total Value',
         sortable: false,
         searchable: false,
-        formatter: (_, row) => `$${(row.quantity * row.unitPrice).toFixed(2)}`
-      }
+        formatter: (_, row) => `$${(row.quantity * row.unitPrice).toFixed(2)}`,
+      },
     ],
     apiEndpoint: '/api/stocks',
     itemsPerPage: 10,
@@ -65,13 +65,13 @@ export class StocksListComponent implements OnInit {
     rowClickable: false,
     showActions: true,
     showEdit: true,
-    showDelete: false
+    showDelete: false,
   };
 
   constructor(
     private router: Router,
     private dataService: DataTableService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     // Show delete button only for Admin users
     this.tableConfig.showDelete = this.authService.isAdmin();
@@ -84,7 +84,7 @@ export class StocksListComponent implements OnInit {
   loadClients(): void {
     this.dataService.getAll<Client>('/api/clients').subscribe({
       next: (clients) => this.clients.set(clients),
-      error: (err) => console.error('Failed to load clients:', err)
+      error: (err) => console.error('Failed to load clients:', err),
     });
   }
 
@@ -110,7 +110,7 @@ export class StocksListComponent implements OnInit {
         },
         error: (err) => {
           alert(`Failed to delete stock item: ${err.error?.message || 'Unknown error'}`);
-        }
+        },
       });
     }
   }

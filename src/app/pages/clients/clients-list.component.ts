@@ -13,7 +13,7 @@ import { Client } from '../../models/client.models';
   standalone: true,
   imports: [DataTableComponent, ClientFormComponent, CommonModule],
   templateUrl: './clients-list.component.html',
-  styleUrl: './clients-list.component.css'
+  styleUrl: './clients-list.component.css',
 })
 export class ClientsListComponent {
   @ViewChild(DataTableComponent) dataTable!: DataTableComponent<Client>;
@@ -32,15 +32,15 @@ export class ClientsListComponent {
         label: 'Created',
         sortable: true,
         searchable: false,
-        formatter: (value) => value ? new Date(value).toLocaleDateString() : '-'
+        formatter: (value) => (value ? new Date(value).toLocaleDateString() : '-'),
       },
       {
         key: 'isActive',
         label: 'Status',
         sortable: true,
         searchable: false,
-        formatter: (value) => value ? '✓ Active' : '✗ Inactive'
-      }
+        formatter: (value) => (value ? '✓ Active' : '✗ Inactive'),
+      },
     ],
     apiEndpoint: '/api/clients',
     itemsPerPage: 10,
@@ -50,13 +50,13 @@ export class ClientsListComponent {
     rowClickable: false,
     showActions: true,
     showEdit: true,
-    showDelete: false
+    showDelete: false,
   };
 
   constructor(
     private router: Router,
     private dataService: DataTableService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     // Show delete button only for Admin users
     this.tableConfig.showDelete = this.authService.isAdmin();
@@ -84,7 +84,7 @@ export class ClientsListComponent {
         },
         error: (err) => {
           alert(`Failed to delete client: ${err.error?.message || 'Unknown error'}`);
-        }
+        },
       });
     }
   }

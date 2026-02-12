@@ -12,7 +12,7 @@ import { User } from '../../models/user.models';
   standalone: true,
   imports: [DataTableComponent, UserFormComponent],
   templateUrl: './users-list.component.html',
-  styleUrl: './users-list.component.css'
+  styleUrl: './users-list.component.css',
 })
 export class UsersListComponent {
   @ViewChild(DataTableComponent) dataTable!: DataTableComponent<User>;
@@ -32,29 +32,29 @@ export class UsersListComponent {
         formatter: (value) => {
           const roles = value as string[];
           return roles.length > 0 ? roles.join(', ') : '-';
-        }
+        },
       },
       {
         key: 'createdAt',
         label: 'Created',
         sortable: true,
         searchable: false,
-        formatter: (value) => value ? new Date(value).toLocaleDateString() : '-'
+        formatter: (value) => (value ? new Date(value).toLocaleDateString() : '-'),
       },
       {
         key: 'lastLoginAt',
         label: 'Last Login',
         sortable: true,
         searchable: false,
-        formatter: (value) => value ? new Date(value).toLocaleDateString() : 'Never'
+        formatter: (value) => (value ? new Date(value).toLocaleDateString() : 'Never'),
       },
       {
         key: 'isActive',
         label: 'Status',
         sortable: true,
         searchable: false,
-        formatter: (value) => value ? '✓ Active' : '✗ Inactive'
-      }
+        formatter: (value) => (value ? '✓ Active' : '✗ Inactive'),
+      },
     ],
     apiEndpoint: '/api/users',
     itemsPerPage: 10,
@@ -63,13 +63,13 @@ export class UsersListComponent {
     rowClickable: false,
     showActions: true,
     showEdit: true,
-    showDelete: false
+    showDelete: false,
   };
 
   constructor(
     private router: Router,
     private dataService: DataTableService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     // Show delete button only for Admin users
     this.tableConfig.showDelete = this.authService.isAdmin();
@@ -92,7 +92,7 @@ export class UsersListComponent {
         },
         error: (err) => {
           alert(`Failed to delete user: ${err.error?.message || 'Unknown error'}`);
-        }
+        },
       });
     }
   }

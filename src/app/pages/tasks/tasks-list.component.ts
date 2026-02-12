@@ -13,7 +13,7 @@ import { Project } from '../../models/project.models';
   standalone: true,
   imports: [DataTableComponent, TaskFormComponent],
   templateUrl: './tasks-list.component.html',
-  styleUrl: './tasks-list.component.css'
+  styleUrl: './tasks-list.component.css',
 })
 export class TasksListComponent implements OnInit {
   @ViewChild(DataTableComponent) dataTable!: DataTableComponent<ProjectTask>;
@@ -29,40 +29,31 @@ export class TasksListComponent implements OnInit {
         label: 'Project',
         sortable: true,
         formatter: (value, row) => {
-          const project = this.projects().find(p => p.id === row.projectId);
+          const project = this.projects().find((p) => p.id === row.projectId);
           return project?.name || `Project #${value}`;
-        }
-      },
-      {
-        key: 'projectId',
-        label: 'Client',
-        sortable: true,
-        formatter: (_, row) => {
-          const project = this.projects().find(p => p.id === row.projectId);
-          return project?.client?.name || '-';
-        }
+        },
       },
       {
         key: 'priority',
         label: 'Priority',
         sortable: true,
         searchable: false,
-        formatter: (value) => this.getPriorityLabel(value)
+        formatter: (value) => this.getPriorityLabel(value),
       },
       {
         key: 'status',
         label: 'Status',
         sortable: true,
         searchable: false,
-        formatter: (value) => this.getStatusLabel(value)
+        formatter: (value) => this.getStatusLabel(value),
       },
       {
         key: 'dueDate',
         label: 'Due Date',
         sortable: true,
         searchable: false,
-        formatter: (value) => value ? new Date(value).toLocaleDateString() : '-'
-      }
+        formatter: (value) => (value ? new Date(value).toLocaleDateString() : '-'),
+      },
     ],
     apiEndpoint: '/api/tasks',
     itemsPerPage: 10,
@@ -72,13 +63,13 @@ export class TasksListComponent implements OnInit {
     rowClickable: false,
     showActions: true,
     showEdit: true,
-    showDelete: false
+    showDelete: false,
   };
 
   constructor(
     private router: Router,
     private dataService: DataTableService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     // Show delete button only for Admin users
     this.tableConfig.showDelete = this.authService.isAdmin();
@@ -91,7 +82,7 @@ export class TasksListComponent implements OnInit {
   loadProjects(): void {
     this.dataService.getAll<Project>('/api/projects').subscribe({
       next: (projects) => this.projects.set(projects),
-      error: (err) => console.error('Failed to load projects:', err)
+      error: (err) => console.error('Failed to load projects:', err),
     });
   }
 
@@ -100,7 +91,7 @@ export class TasksListComponent implements OnInit {
       [TaskPriority.Low]: '🟢 Low',
       [TaskPriority.Medium]: '🟡 Medium',
       [TaskPriority.High]: '🟠 High',
-      [TaskPriority.Critical]: '🔴 Critical'
+      [TaskPriority.Critical]: '🔴 Critical',
     };
     return priorityLabels[priority] || 'Unknown';
   }
@@ -110,7 +101,7 @@ export class TasksListComponent implements OnInit {
       [TaskItemStatus.Todo]: '📋 To Do',
       [TaskItemStatus.InProgress]: '⚙️ In Progress',
       [TaskItemStatus.Done]: '✅ Done',
-      [TaskItemStatus.Blocked]: '🚫 Blocked'
+      [TaskItemStatus.Blocked]: '🚫 Blocked',
     };
     return statusLabels[status] || 'Unknown';
   }
@@ -137,7 +128,7 @@ export class TasksListComponent implements OnInit {
         },
         error: (err) => {
           alert(`Failed to delete task: ${err.error?.message || 'Unknown error'}`);
-        }
+        },
       });
     }
   }

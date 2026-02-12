@@ -13,7 +13,7 @@ import { Client } from '../../models/client.models';
   standalone: true,
   imports: [DataTableComponent, HorseFormComponent],
   templateUrl: './horses-list.component.html',
-  styleUrl: './horses-list.component.css'
+  styleUrl: './horses-list.component.css',
 })
 export class HorsesListComponent implements OnInit {
   @ViewChild(DataTableComponent) dataTable!: DataTableComponent<Horse>;
@@ -29,7 +29,7 @@ export class HorsesListComponent implements OnInit {
         key: 'dateOfBirth',
         label: 'Date of Birth',
         sortable: true,
-        formatter: (value) => value ? new Date(value).toLocaleDateString() : '-'
+        formatter: (value) => (value ? new Date(value).toLocaleDateString() : '-'),
       },
       { key: 'gender', label: 'Gender', sortable: true },
       { key: 'color', label: 'Color', sortable: true },
@@ -39,16 +39,16 @@ export class HorsesListComponent implements OnInit {
         label: 'Client',
         sortable: true,
         formatter: (value, row) => {
-          const client = this.clients().find(c => c.id === row.clientId);
+          const client = this.clients().find((c) => c.id === row.clientId);
           return client?.name || `Client #${value}`;
-        }
+        },
       },
       {
         key: 'isActive',
         label: 'Status',
         sortable: true,
-        formatter: (value) => value ? 'Active' : 'Inactive'
-      }
+        formatter: (value) => (value ? 'Active' : 'Inactive'),
+      },
     ],
     apiEndpoint: '/api/horses',
     itemsPerPage: 10,
@@ -58,13 +58,13 @@ export class HorsesListComponent implements OnInit {
     rowClickable: false,
     showActions: true,
     showEdit: true,
-    showDelete: false
+    showDelete: false,
   };
 
   constructor(
     private router: Router,
     private dataService: DataTableService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     // Show delete button only for Admin users
     this.tableConfig.showDelete = this.authService.isAdmin();
@@ -77,7 +77,7 @@ export class HorsesListComponent implements OnInit {
   loadClients(): void {
     this.dataService.getAll<Client>('/api/clients').subscribe({
       next: (clients) => this.clients.set(clients),
-      error: (err) => console.error('Failed to load clients:', err)
+      error: (err) => console.error('Failed to load clients:', err),
     });
   }
 
@@ -103,7 +103,7 @@ export class HorsesListComponent implements OnInit {
         },
         error: (err) => {
           alert(`Failed to delete horse: ${err.error?.message || 'Unknown error'}`);
-        }
+        },
       });
     }
   }

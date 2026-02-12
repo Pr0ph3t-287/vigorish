@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './user-form.component.html',
-  styleUrl: './user-form.component.css'
+  styleUrl: './user-form.component.css',
 })
 export class UserFormComponent implements OnInit {
   @Input() user?: User;
@@ -21,7 +21,7 @@ export class UserFormComponent implements OnInit {
     lastName: '',
     email: '',
     isActive: true,
-    roles: []
+    roles: [],
   });
 
   availableRoles = signal<string[]>([]);
@@ -38,7 +38,7 @@ export class UserFormComponent implements OnInit {
         lastName: this.user.lastName,
         email: this.user.email,
         isActive: this.user.isActive,
-        roles: [...this.user.roles]
+        roles: [...this.user.roles],
       });
     }
   }
@@ -53,20 +53,20 @@ export class UserFormComponent implements OnInit {
       error: (error) => {
         console.error('Failed to load roles:', error);
         this.error.set('Failed to load roles. Please try again.');
-      }
+      },
     });
   }
 
   updateField(field: keyof UpdateUserRequest, value: any): void {
-    this.formData.update(data => ({ ...data, [field]: value }));
+    this.formData.update((data) => ({ ...data, [field]: value }));
   }
 
   toggleRole(role: string): void {
-    this.formData.update(data => {
+    this.formData.update((data) => {
       const roles = data.roles || [];
       const index = roles.indexOf(role);
       if (index > -1) {
-        return { ...data, roles: roles.filter(r => r !== role) };
+        return { ...data, roles: roles.filter((r) => r !== role) };
       } else {
         return { ...data, roles: [...roles, role] };
       }
@@ -114,7 +114,7 @@ export class UserFormComponent implements OnInit {
         console.error('Failed to update user:', error);
         this.error.set(error.error?.message || 'Failed to update user. Please try again.');
         this.isSubmitting.set(false);
-      }
+      },
     });
   }
 

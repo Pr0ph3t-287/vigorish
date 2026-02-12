@@ -9,7 +9,7 @@ import { CreateClientRequest, Client } from '../../../models/client.models';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './client-form.component.html',
-  styleUrl: './client-form.component.css'
+  styleUrl: './client-form.component.css',
 })
 export class ClientFormComponent implements OnInit {
   @Input() client?: Client;
@@ -20,7 +20,7 @@ export class ClientFormComponent implements OnInit {
     name: '',
     email: '',
     phone: '',
-    address: ''
+    address: '',
   });
 
   isSubmitting = signal(false);
@@ -34,7 +34,7 @@ export class ClientFormComponent implements OnInit {
         name: this.client.name,
         email: this.client.email || '',
         phone: this.client.phone || '',
-        address: this.client.address || ''
+        address: this.client.address || '',
       });
     }
   }
@@ -63,8 +63,10 @@ export class ClientFormComponent implements OnInit {
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.error.set(err.error?.message || `Failed to ${this.isEditMode ? 'update' : 'create'} client`);
-      }
+        this.error.set(
+          err.error?.message || `Failed to ${this.isEditMode ? 'update' : 'create'} client`,
+        );
+      },
     });
   }
 
@@ -73,6 +75,6 @@ export class ClientFormComponent implements OnInit {
   }
 
   updateField<K extends keyof CreateClientRequest>(field: K, value: string): void {
-    this.formData.update(data => ({ ...data, [field]: value }));
+    this.formData.update((data) => ({ ...data, [field]: value }));
   }
 }

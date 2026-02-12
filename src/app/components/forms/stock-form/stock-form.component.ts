@@ -10,7 +10,7 @@ import { Client } from '../../../models/client.models';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './stock-form.component.html',
-  styleUrl: './stock-form.component.css'
+  styleUrl: './stock-form.component.css',
 })
 export class StockFormComponent implements OnInit {
   @Input() stock?: Stock;
@@ -23,7 +23,7 @@ export class StockFormComponent implements OnInit {
     quantity: 0,
     unitPrice: 0,
     category: '',
-    clientId: 0
+    clientId: 0,
   });
 
   clients = signal<Client[]>([]);
@@ -41,7 +41,7 @@ export class StockFormComponent implements OnInit {
         quantity: this.stock.quantity,
         unitPrice: this.stock.unitPrice,
         category: this.stock.category || '',
-        clientId: this.stock.clientId
+        clientId: this.stock.clientId,
       });
     }
   }
@@ -50,10 +50,10 @@ export class StockFormComponent implements OnInit {
     return !!this.stock;
   }
 
-  loadClients(): void{
+  loadClients(): void {
     this.dataService.getAll<Client>('/api/clients').subscribe({
       next: (clients) => this.clients.set(clients),
-      error: () => this.error.set('Failed to load clients')
+      error: () => this.error.set('Failed to load clients'),
     });
   }
 
@@ -81,8 +81,10 @@ export class StockFormComponent implements OnInit {
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.error.set(err.error?.message || `Failed to ${this.isEditMode ? 'update' : 'create'} stock item`);
-      }
+        this.error.set(
+          err.error?.message || `Failed to ${this.isEditMode ? 'update' : 'create'} stock item`,
+        );
+      },
     });
   }
 
@@ -91,6 +93,6 @@ export class StockFormComponent implements OnInit {
   }
 
   updateField<K extends keyof CreateStockRequest>(field: K, value: any): void {
-    this.formData.update(data => ({ ...data, [field]: value }));
+    this.formData.update((data) => ({ ...data, [field]: value }));
   }
 }

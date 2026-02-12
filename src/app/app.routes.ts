@@ -8,17 +8,18 @@ import { ProjectsListComponent } from './pages/projects/projects-list.component'
 import { StocksListComponent } from './pages/stocks/stocks-list.component';
 import { TasksListComponent } from './pages/tasks/tasks-list.component';
 import { UsersListComponent } from './pages/users/users-list.component';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'clients', component: ClientsListComponent },
-  { path: 'projects', component: ProjectsListComponent },
-  { path: 'horses', component: HorsesListComponent },
-  { path: 'stocks', component: StocksListComponent },
-  { path: 'tasks', component: TasksListComponent },
-  { path: 'users', component: UsersListComponent },
+  { path: 'home', component: HomeComponent, canActivate: [authGuard] },
+  { path: 'clients', component: ClientsListComponent, canActivate: [authGuard] },
+  { path: 'projects', component: ProjectsListComponent, canActivate: [authGuard] },
+  { path: 'horses', component: HorsesListComponent, canActivate: [authGuard] },
+  { path: 'stocks', component: StocksListComponent, canActivate: [authGuard] },
+  { path: 'tasks', component: TasksListComponent, canActivate: [authGuard] },
+  { path: 'users', component: UsersListComponent, canActivate: [authGuard] },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: '**', redirectTo: '/home', pathMatch: 'full' }
+  { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];

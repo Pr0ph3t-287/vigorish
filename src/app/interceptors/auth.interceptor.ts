@@ -8,7 +8,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next): Observable<HttpEv
 
   // Skip auth for these endpoints
   const excludedUrls = ['/api/auth/login', '/api/auth/register', '/api/auth/refresh'];
-  const isExcluded = excludedUrls.some(url => req.url.includes(url));
+  const isExcluded = excludedUrls.some((url) => req.url.includes(url));
 
   if (isExcluded) {
     return next(req);
@@ -19,8 +19,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next): Observable<HttpEv
   if (accessToken) {
     req = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${accessToken}`
-      }
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
   }
 
@@ -32,14 +32,14 @@ export const authInterceptor: HttpInterceptorFn = (req, next): Observable<HttpEv
       }
 
       return throwError(() => error);
-    })
+    }),
   );
 };
 
 function handleTokenRefresh(
   authService: AuthService,
   req: HttpRequest<unknown>,
-  next: any
+  next: any,
 ): Observable<HttpEvent<unknown>> {
   const accessToken = authService.getAccessToken();
   const refreshToken = authService.getRefreshToken();
@@ -56,8 +56,8 @@ function handleTokenRefresh(
       if (newAccessToken) {
         req = req.clone({
           setHeaders: {
-            Authorization: `Bearer ${newAccessToken}`
-          }
+            Authorization: `Bearer ${newAccessToken}`,
+          },
         });
       }
       return next(req);
@@ -66,6 +66,6 @@ function handleTokenRefresh(
       // If refresh fails, logout user
       authService.logout();
       return throwError(() => error);
-    })
+    }),
   );
 }

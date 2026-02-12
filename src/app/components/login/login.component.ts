@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 
@@ -16,11 +16,16 @@ export class LoginComponent {
   password = signal('');
   errorMessage = signal('');
   isLoading = signal(false);
+  returnUrl: string;
 
   constructor(
     private authService: AuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    // Get return url from route parameters or default to '/home'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+  }
 
   onSubmit(): void {
     this.errorMessage.set('');
@@ -34,7 +39,7 @@ export class LoginComponent {
     this.authService.login(credentials).subscribe({
       next: () => {
         this.isLoading.set(false);
-        this.router.navigate(['/home']);
+        this.router.navigateByUrl(this.returnUrl);
       },
       error: (error) => {
         this.isLoading.set(false);

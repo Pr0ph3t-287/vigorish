@@ -10,7 +10,7 @@ import { Client } from '../../../models/client.models';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './horse-form.component.html',
-  styleUrl: './horse-form.component.css'
+  styleUrl: './horse-form.component.css',
 })
 export class HorseFormComponent implements OnInit {
   @Input() horse?: Horse;
@@ -24,7 +24,7 @@ export class HorseFormComponent implements OnInit {
     gender: '',
     color: '',
     registrationNumber: '',
-    clientId: 0
+    clientId: 0,
   });
 
   clients = signal<Client[]>([]);
@@ -43,7 +43,7 @@ export class HorseFormComponent implements OnInit {
         gender: this.horse.gender || '',
         color: this.horse.color || '',
         registrationNumber: this.horse.registrationNumber || '',
-        clientId: this.horse.clientId
+        clientId: this.horse.clientId,
       });
     }
   }
@@ -55,7 +55,7 @@ export class HorseFormComponent implements OnInit {
   loadClients(): void {
     this.dataService.getAll<Client>('/api/clients').subscribe({
       next: (clients) => this.clients.set(clients),
-      error: () => this.error.set('Failed to load clients')
+      error: () => this.error.set('Failed to load clients'),
     });
   }
 
@@ -83,8 +83,10 @@ export class HorseFormComponent implements OnInit {
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.error.set(err.error?.message || `Failed to ${this.isEditMode ? 'update' : 'create'} horse`);
-      }
+        this.error.set(
+          err.error?.message || `Failed to ${this.isEditMode ? 'update' : 'create'} horse`,
+        );
+      },
     });
   }
 
@@ -93,6 +95,6 @@ export class HorseFormComponent implements OnInit {
   }
 
   updateField<K extends keyof CreateHorseRequest>(field: K, value: any): void {
-    this.formData.update(data => ({ ...data, [field]: value }));
+    this.formData.update((data) => ({ ...data, [field]: value }));
   }
 }

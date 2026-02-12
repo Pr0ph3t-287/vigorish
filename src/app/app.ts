@@ -7,7 +7,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
   selector: 'app-root',
   imports: [RouterOutlet, NavbarComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('vigorish');
@@ -22,7 +22,7 @@ export class App {
       });
   }
 
-  // Show navbar on all pages except login
+  // Show navbar on all pages except login, register
   showNavbar = computed(() => {
     return !this.currentRoute().includes('/login') && !this.currentRoute().includes('/register');
   });

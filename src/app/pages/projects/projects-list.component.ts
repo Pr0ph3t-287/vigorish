@@ -14,7 +14,7 @@ import { Client } from '../../models/client.models';
   standalone: true,
   imports: [DataTableComponent, ProjectFormComponent, CommonModule],
   templateUrl: './projects-list.component.html',
-  styleUrl: './projects-list.component.css'
+  styleUrl: './projects-list.component.css',
 })
 export class ProjectsListComponent implements OnInit {
   @ViewChild(DataTableComponent) dataTable!: DataTableComponent<Project>;
@@ -30,9 +30,9 @@ export class ProjectsListComponent implements OnInit {
         label: 'Client',
         sortable: true,
         formatter: (value, row) => {
-          const client = this.clients().find(c => c.id === row.clientId);
+          const client = this.clients().find((c) => c.id === row.clientId);
           return client?.name || `Client #${value}`;
-        }
+        },
       },
       { key: 'description', label: 'Description', sortable: false },
       {
@@ -40,22 +40,22 @@ export class ProjectsListComponent implements OnInit {
         label: 'Start Date',
         sortable: true,
         searchable: false,
-        formatter: (value) => value ? new Date(value).toLocaleDateString() : '-'
+        formatter: (value) => (value ? new Date(value).toLocaleDateString() : '-'),
       },
       {
         key: 'endDate',
         label: 'End Date',
         sortable: true,
         searchable: false,
-        formatter: (value) => value ? new Date(value).toLocaleDateString() : '-'
+        formatter: (value) => (value ? new Date(value).toLocaleDateString() : '-'),
       },
       {
         key: 'status',
         label: 'Status',
         sortable: true,
         searchable: false,
-        formatter: (value) => this.getStatusLabel(value)
-      }
+        formatter: (value) => this.getStatusLabel(value),
+      },
     ],
     apiEndpoint: '/api/projects',
     itemsPerPage: 10,
@@ -65,13 +65,13 @@ export class ProjectsListComponent implements OnInit {
     rowClickable: false,
     showActions: true,
     showEdit: true,
-    showDelete: false
+    showDelete: false,
   };
 
   constructor(
     private router: Router,
     private dataService: DataTableService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {
     // Show delete button only for Admin users
     this.tableConfig.showDelete = this.authService.isAdmin();
@@ -84,7 +84,7 @@ export class ProjectsListComponent implements OnInit {
   loadClients(): void {
     this.dataService.getAll<Client>('/api/clients').subscribe({
       next: (clients) => this.clients.set(clients),
-      error: (err) => console.error('Failed to load clients:', err)
+      error: (err) => console.error('Failed to load clients:', err),
     });
   }
 
@@ -94,7 +94,7 @@ export class ProjectsListComponent implements OnInit {
       [ProjectStatus.InProgress]: '🔄 In Progress',
       [ProjectStatus.Completed]: '✅ Completed',
       [ProjectStatus.OnHold]: '⏸️ On Hold',
-      [ProjectStatus.Cancelled]: '❌ Cancelled'
+      [ProjectStatus.Cancelled]: '❌ Cancelled',
     };
     return statusLabels[status] || 'Unknown';
   }
@@ -121,7 +121,7 @@ export class ProjectsListComponent implements OnInit {
         },
         error: (err) => {
           alert(`Failed to delete project: ${err.error?.message || 'Unknown error'}`);
-        }
+        },
       });
     }
   }

@@ -11,7 +11,7 @@ import { Client } from '../../../models/client.models';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './project-form.component.html',
-  styleUrl: './project-form.component.css'
+  styleUrl: './project-form.component.css',
 })
 export class ProjectFormComponent implements OnInit {
   @Input() project?: Project;
@@ -24,7 +24,7 @@ export class ProjectFormComponent implements OnInit {
     startDate: '',
     endDate: '',
     status: ProjectStatus.Pending,
-    clientId: 0
+    clientId: 0,
   });
 
   clients = signal<Client[]>([]);
@@ -46,7 +46,7 @@ export class ProjectFormComponent implements OnInit {
         startDate: this.project.startDate || '',
         endDate: this.project.endDate || '',
         status: this.project.status,
-        clientId: this.project.clientId
+        clientId: this.project.clientId,
       });
     }
   }
@@ -58,7 +58,7 @@ export class ProjectFormComponent implements OnInit {
   loadClients(): void {
     this.dataService.getAll<Client>('/api/clients').subscribe({
       next: (clients) => this.clients.set(clients),
-      error: () => this.error.set('Failed to load clients')
+      error: () => this.error.set('Failed to load clients'),
     });
   }
 
@@ -86,8 +86,10 @@ export class ProjectFormComponent implements OnInit {
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.error.set(err.error?.message || `Failed to ${this.isEditMode ? 'update' : 'create'} project`);
-      }
+        this.error.set(
+          err.error?.message || `Failed to ${this.isEditMode ? 'update' : 'create'} project`,
+        );
+      },
     });
   }
 
@@ -96,6 +98,6 @@ export class ProjectFormComponent implements OnInit {
   }
 
   updateField<K extends keyof CreateProjectRequest>(field: K, value: any): void {
-    this.formData.update(data => ({ ...data, [field]: value }));
+    this.formData.update((data) => ({ ...data, [field]: value }));
   }
 }
