@@ -15,6 +15,8 @@ export class DataTableComponent<T extends { id?: number }> implements OnInit {
   @Input({ required: true }) config!: TableConfig<T>;
   @Output() rowClick = new EventEmitter<T>();
   @Output() createClick = new EventEmitter<void>();
+  @Output() editClick = new EventEmitter<T>();
+  @Output() deleteClick = new EventEmitter<T>();
 
   data = signal<T[]>([]);
   searchTerm = signal('');
@@ -149,6 +151,16 @@ export class DataTableComponent<T extends { id?: number }> implements OnInit {
 
   onCreateClick(): void {
     this.createClick.emit();
+  }
+
+  onEditClick(row: T, event: Event): void {
+    event.stopPropagation();
+    this.editClick.emit(row);
+  }
+
+  onDeleteClick(row: T, event: Event): void {
+    event.stopPropagation();
+    this.deleteClick.emit(row);
   }
 
   getSortIcon(column: string): string {

@@ -1,9 +1,9 @@
 <div class="modal-header">
-  <h5 class="modal-title">Add Stock Item</h5>
+  <h5 class="modal-title">{{ isEditMode ? 'Edit Stock Item' : 'Add Stock Item' }}</h5>
   <button type="button" class="btn-close" (click)="onCancel()" [disabled]="isSubmitting()"></button>
 </div>
 
-<form (ngSubmit)="onSubmit()">
+<form (ngSubmit)="onSubmit(); false">
   <div class="modal-body">
     @if (error()) {
     <div class="alert alert-danger" role="alert">{{ error() }}</div>
@@ -69,9 +69,9 @@
     <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
       @if (isSubmitting()) {
       <span class="spinner-border spinner-border-sm me-2"></span>
-      Creating...
+      {{ isEditMode ? 'Updating...' : 'Creating...' }}
       } @else {
-      Create Stock Item
+      {{ isEditMode ? 'Update Stock Item' : 'Create Stock Item' }}
       }
     </button>
   </div>

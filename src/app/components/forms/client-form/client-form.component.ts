@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Output, Input, signal, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DataTableService } from '../../../services/data-table.service';
-import { CreateClientRequest } from '../../../models/client.models';
+import { CreateClientRequest, Client } from '../../../models/client.models';
 
 @Component({
   selector: 'app-client-form',
@@ -11,7 +11,8 @@ import { CreateClientRequest } from '../../../models/client.models';
   templateUrl: './client-form.component.html',
   styleUrl: './client-form.component.css'
 })
-export class ClientFormComponent {
+export class ClientFormComponent implements OnInit {
+  @Input() client?: Client;
   @Output() saved = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();
 
@@ -27,6 +28,21 @@ export class ClientFormComponent {
 
   constructor(private dataService: DataTableService) {}
 
+  ngOnInit(): void {
+    if (this.client) {
+      this.formData.set({
+        name: this.client.name,
+        email: this.client.email || '',
+        phone: this.client.phone || '',
+        address: this.client.address || ''
+      });
+    }
+  }
+
+  get isEditMode(): boolean {
+    return !!this.client;
+  }
+
   onSubmit(): void {
     if (!this.formData().name.trim()) {
       this.error.set('Name is required');
@@ -36,14 +52,18 @@ export class ClientFormComponent {
     this.isSubmitting.set(true);
     this.error.set(null);
 
-    this.dataService.create('/api/clients', this.formData()).subscribe({
+    const request = this.isEditMode
+      ? this.dataService.update('/api/clients', this.client!.id, this.formData())
+      : this.dataService.create('/api/clients', this.formData());
+
+    request.subscribe({
       next: () => {
         this.isSubmitting.set(false);
         this.saved.emit();
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.error.set(err.error?.message || 'Failed to create client');
+        this.error.set(err.error?.message || `Failed to ${this.isEditMode ? 'update' : 'create'} client`);
       }
     });
   }

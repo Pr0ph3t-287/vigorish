@@ -20,6 +20,14 @@ export class NavbarComponent {
     return this.authService.isAuthenticated();
   }
 
+  get userEmail() {
+    return this.authService.userEmail();
+  }
+
+  get isAdmin() {
+    return this.authService.isAdmin();
+  }
+
   onLogout(): void {
     this.authService.logout();
     this.router.navigate(['/login']);

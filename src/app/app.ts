@@ -24,6 +24,6 @@ export class App {
 
   // Show navbar on all pages except login
   showNavbar = computed(() => {
-    return !this.currentRoute().includes('/login');
+    return !this.currentRoute().includes('/login') && !this.currentRoute().includes('/register');
   });
 }

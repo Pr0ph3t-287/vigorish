@@ -1,9 +1,9 @@
 <div class="modal-header">
-  <h5 class="modal-title">Add New Client</h5>
+  <h5 class="modal-title">{{ isEditMode ? 'Edit Client' : 'Add New Client' }}</h5>
   <button type="button" class="btn-close" (click)="onCancel()" [disabled]="isSubmitting()"></button>
 </div>
 
-<form (ngSubmit)="onSubmit()">
+<form (ngSubmit)="onSubmit(); false">
   <div class="modal-body">
     @if (error()) {
     <div class="alert alert-danger" role="alert">
@@ -68,9 +68,9 @@
     <button type="submit" class="btn btn-primary" [disabled]="isSubmitting()">
       @if (isSubmitting()) {
       <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-      Creating...
+      {{ isEditMode ? 'Updating...' : 'Creating...' }}
       } @else {
-      Create Client
+      {{ isEditMode ? 'Update Client' : 'Create Client' }}
       }
     </button>
   </div>

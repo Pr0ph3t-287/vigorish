@@ -12,6 +12,8 @@
         [config]="tableConfig"
         (rowClick)="onRowClick($event)"
         (createClick)="onCreateClick()"
+        (editClick)="onEditClick($event)"
+        (deleteClick)="onDeleteClick($event)"
       ></app-data-table>
     </div>
   </div>
@@ -23,6 +25,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <app-client-form
+        [client]="editingClient()"
         (saved)="onFormSaved()"
         (cancelled)="onFormCancelled()"
       ></app-client-form>

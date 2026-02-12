@@ -12,6 +12,8 @@
         [config]="tableConfig"
         (rowClick)="onRowClick($event)"
         (createClick)="onCreateClick()"
+        (editClick)="onEditClick($event)"
+        (deleteClick)="onDeleteClick($event)"
       ></app-data-table>
     </div>
   </div>
@@ -21,7 +23,7 @@
 <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
-      <app-horse-form (saved)="onFormSaved()" (cancelled)="onFormCancelled()"></app-horse-form>
+      <app-horse-form [horse]="editingHorse()" (saved)="onFormSaved()" (cancelled)="onFormCancelled()"></app-horse-form>
     </div>
   </div>
 </div>

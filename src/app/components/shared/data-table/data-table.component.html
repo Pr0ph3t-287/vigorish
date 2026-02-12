@@ -62,6 +62,9 @@
               }
             </th>
             }
+            @if (config.showActions !== false && (config.showEdit !== false || config.showDelete !== false)) {
+            <th style="width: 120px">Actions</th>
+            }
           </tr>
         </thead>
         <tbody>
@@ -72,6 +75,22 @@
           >
             @for (column of config.columns; track column.key) {
             <td>{{ getCellValue(row, column) }}</td>
+            }
+            @if (config.showActions !== false && (config.showEdit !== false || config.showDelete !== false)) {
+            <td>
+              <div class="btn-group btn-group-sm" role="group">
+                @if (config.showEdit !== false) {
+                <button type="button" class="btn btn-outline-primary" (click)="onEditClick(row, $event)" title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                }
+                @if (config.showDelete !== false) {
+                <button type="button" class="btn btn-outline-danger" (click)="onDeleteClick(row, $event)" title="Delete">
+                  <i class="bi bi-trash"></i>
+                </button>
+                }
+              </div>
+            </td>
             }
           </tr>
           }

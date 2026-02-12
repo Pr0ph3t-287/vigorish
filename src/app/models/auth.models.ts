@@ -24,3 +24,8 @@ export interface RefreshTokenRequest {
 export interface RevokeTokenRequest {
   refreshToken: string;
 }
+
+export interface UserRolesResponse {
+  email: string;
+  roles: string[];
+}

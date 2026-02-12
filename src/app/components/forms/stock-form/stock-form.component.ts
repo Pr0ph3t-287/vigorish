@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Output, signal, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DataTableService } from '../../../services/data-table.service';
-import { CreateStockRequest } from '../../../models/stock.models';
+import { CreateStockRequest, Stock } from '../../../models/stock.models';
 import { Client } from '../../../models/client.models';
 
 @Component({
@@ -13,6 +13,7 @@ import { Client } from '../../../models/client.models';
   styleUrl: './stock-form.component.css'
 })
 export class StockFormComponent implements OnInit {
+  @Input() stock?: Stock;
   @Output() saved = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();
 
@@ -33,9 +34,23 @@ export class StockFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadClients();
+    if (this.stock) {
+      this.formData.set({
+        name: this.stock.name,
+        description: this.stock.description || '',
+        quantity: this.stock.quantity,
+        unitPrice: this.stock.unitPrice,
+        category: this.stock.category || '',
+        clientId: this.stock.clientId
+      });
+    }
   }
 
-  loadClients(): void {
+  get isEditMode(): boolean {
+    return !!this.stock;
+  }
+
+  loadClients(): void{
     this.dataService.getAll<Client>('/api/clients').subscribe({
       next: (clients) => this.clients.set(clients),
       error: () => this.error.set('Failed to load clients')
@@ -55,14 +70,18 @@ export class StockFormComponent implements OnInit {
     this.isSubmitting.set(true);
     this.error.set(null);
 
-    this.dataService.create('/api/stocks', this.formData()).subscribe({
+    const request = this.isEditMode
+      ? this.dataService.update('/api/stocks', this.stock!.id, this.formData())
+      : this.dataService.create('/api/stocks', this.formData());
+
+    request.subscribe({
       next: () => {
         this.isSubmitting.set(false);
         this.saved.emit();
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.error.set(err.error?.message || 'Failed to create stock item');
+        this.error.set(err.error?.message || `Failed to ${this.isEditMode ? 'update' : 'create'} stock item`);
       }
     });
   }

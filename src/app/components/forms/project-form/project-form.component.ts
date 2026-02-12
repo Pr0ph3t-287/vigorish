@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Output, signal, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output, Input, signal, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DataTableService } from '../../../services/data-table.service';
-import { CreateProjectRequest } from '../../../models/project.models';
+import { CreateProjectRequest, Project } from '../../../models/project.models';
 import { ProjectStatus } from '../../../models/project.models';
 import { Client } from '../../../models/client.models';
 
@@ -14,6 +14,7 @@ import { Client } from '../../../models/client.models';
   styleUrl: './project-form.component.css'
 })
 export class ProjectFormComponent implements OnInit {
+  @Input() project?: Project;
   @Output() saved = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();
 
@@ -38,6 +39,20 @@ export class ProjectFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadClients();
+    if (this.project) {
+      this.formData.set({
+        name: this.project.name,
+        description: this.project.description || '',
+        startDate: this.project.startDate || '',
+        endDate: this.project.endDate || '',
+        status: this.project.status,
+        clientId: this.project.clientId
+      });
+    }
+  }
+
+  get isEditMode(): boolean {
+    return !!this.project;
   }
 
   loadClients(): void {
@@ -60,14 +75,18 @@ export class ProjectFormComponent implements OnInit {
     this.isSubmitting.set(true);
     this.error.set(null);
 
-    this.dataService.create('/api/projects', this.formData()).subscribe({
+    const request = this.isEditMode
+      ? this.dataService.update('/api/projects', this.project!.id, this.formData())
+      : this.dataService.create('/api/projects', this.formData());
+
+    request.subscribe({
       next: () => {
         this.isSubmitting.set(false);
         this.saved.emit();
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.error.set(err.error?.message || 'Failed to create project');
+        this.error.set(err.error?.message || `Failed to ${this.isEditMode ? 'update' : 'create'} project`);
       }
     });
   }

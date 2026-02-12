@@ -15,6 +15,9 @@ export interface TableConfig<T = any> {
   showCreate?: boolean;
   createButtonText?: string;
   rowClickable?: boolean;
+  showActions?: boolean;
+  showEdit?: boolean;
+  showDelete?: boolean;
 }
 
 export interface SortConfig {

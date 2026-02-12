@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Output, signal, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DataTableService } from '../../../services/data-table.service';
-import { CreateHorseRequest } from '../../../models/horse.models';
+import { CreateHorseRequest, Horse } from '../../../models/horse.models';
 import { Client } from '../../../models/client.models';
 
 @Component({
@@ -13,6 +13,7 @@ import { Client } from '../../../models/client.models';
   styleUrl: './horse-form.component.css'
 })
 export class HorseFormComponent implements OnInit {
+  @Input() horse?: Horse;
   @Output() saved = new EventEmitter<void>();
   @Output() cancelled = new EventEmitter<void>();
 
@@ -34,6 +35,21 @@ export class HorseFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadClients();
+    if (this.horse) {
+      this.formData.set({
+        name: this.horse.name,
+        breed: this.horse.breed || '',
+        dateOfBirth: this.horse.dateOfBirth || '',
+        gender: this.horse.gender || '',
+        color: this.horse.color || '',
+        registrationNumber: this.horse.registrationNumber || '',
+        clientId: this.horse.clientId
+      });
+    }
+  }
+
+  get isEditMode(): boolean {
+    return !!this.horse;
   }
 
   loadClients(): void {
@@ -56,14 +72,18 @@ export class HorseFormComponent implements OnInit {
     this.isSubmitting.set(true);
     this.error.set(null);
 
-    this.dataService.create('/api/horses', this.formData()).subscribe({
+    const request = this.isEditMode
+      ? this.dataService.update('/api/horses', this.horse!.id!, this.formData())
+      : this.dataService.create('/api/horses', this.formData());
+
+    request.subscribe({
       next: () => {
         this.isSubmitting.set(false);
         this.saved.emit();
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        this.error.set(err.error?.message || 'Failed to create horse');
+        this.error.set(err.error?.message || `Failed to ${this.isEditMode ? 'update' : 'create'} horse`);
       }
     });
   }
